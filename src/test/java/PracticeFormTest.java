@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,8 +19,8 @@ public class PracticeFormTest {
         WebDriverManager.chromedriver().setup();
 
         Configuration.browser = "chrome";
-        Configuration.browserSize = "max";
-        Configuration.browserPosition = "10x10";
+        Configuration.browserSize = "1920x1080";
+        Configuration.browserPosition = "0x0";
         Configuration.timeout = 20000;
         Configuration.pageLoadTimeout = 70000;
         Configuration.pollingInterval = 200;
@@ -52,6 +53,21 @@ public class PracticeFormTest {
         assertThat(map.get("Mobile")).isEqualTo("1234567890");
         assertThat(map.get("Subjects")).isEqualTo("Maths");
         assertThat(map.get("Hobbies")).isEqualTo("Sports");
-        sleep(5000);
+    }
+
+    @Test
+    public void negativeTest() {
+        practiceFormPage.openPage();
+        practiceFormPage.submitForm();
+        assertThat($("#firstName").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
+        assertThat($("#lastName").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
+        assertThat($("#userNumber").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
+    }
+
+    @Test
+    public void alertTest() {
+        practiceFormPage.openAlertPage();
+        practiceFormPage.choseSimpleAlert();
+        assertThat(practiceFormPage.catchAlertText()).isEqualTo("You clicked a button");
     }
 }

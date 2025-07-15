@@ -1,17 +1,19 @@
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class PracticeFormPage {
 
     private SelenideElement formBtn = $(".show #item-0"); //Кнопка для открытия формы
+    private SelenideElement alertBtn = $(".show #item-1"); //Кнопка для открытия алертов
+    private SelenideElement simpleAlertBtn = $("#alertButton"); //Первая кнопка в алертах
     private SelenideElement firstName = $("#firstName"); //Поле с именем
     private SelenideElement lastName = $("#lastName"); //Поле с фамилией
     private SelenideElement userEmail = $("#userEmail"); //Поле с почтой
@@ -33,6 +35,19 @@ public class PracticeFormPage {
     public void openPage(){
         open("/forms");
         formBtn.shouldBe(visible, enabled).click();
+    }
+
+    public void openAlertPage(){
+        open("/alertsWindows");
+        alertBtn.shouldBe(visible, enabled).click();
+    }
+
+    public void choseSimpleAlert(){
+        simpleAlertBtn.click();
+    }
+
+    public String catchAlertText(){
+        return Selenide.switchTo().alert().getText();
     }
 
     public void setFirstName(String value){
@@ -85,7 +100,7 @@ public class PracticeFormPage {
     }
 
     public void submitForm(){
-        sudmitBtn.click();
+        sudmitBtn.scrollTo().click();
     }
 
     public Map<String,String> getSubmissionResult(){
