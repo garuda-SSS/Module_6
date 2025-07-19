@@ -7,6 +7,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
+import static dev.failsafe.internal.util.Assert.isTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PracticeFormTest {
@@ -59,9 +60,10 @@ public class PracticeFormTest {
     public void negativeTest() {
         practiceFormPage.openPage();
         practiceFormPage.submitForm();
-        assertThat($("#firstName").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
-        assertThat($("#lastName").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
-        assertThat($("#userNumber").getCssValue("border-color")).isEqualTo("rgb(220, 53, 69)");
+        sleep(5000);
+        assertThat(practiceFormPage.firstNameCheck()).isTrue();
+        assertThat(practiceFormPage.lastNameCheck()).isTrue();;
+        assertThat(practiceFormPage.numberCheck()).isTrue();;
     }
 
     @Test

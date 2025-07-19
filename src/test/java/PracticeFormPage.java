@@ -28,9 +28,25 @@ public class PracticeFormPage {
     private ElementsCollection forCity = $$("#stateCity-wrapper .col-md-4 .css-1wa3eu0-placeholder"); //Костыль
     private SelenideElement dateBirth = $("#dateOfBirthInput");//Вызов календаря
     private SelenideElement day13 = $(".react-datepicker__day--013");//Костыль
+    private String colorForCheck = "rgb(220, 53, 69)";
 
 
 
+    private boolean checkColor (String color, SelenideElement elem){
+       return elem.getCssValue("border-color").equals(color);
+    }
+
+    public boolean firstNameCheck(){
+        return checkColor(colorForCheck,firstName);
+    }
+
+    public boolean lastNameCheck(){
+        return checkColor(colorForCheck,lastName);
+    }
+
+    public boolean numberCheck(){
+        return checkColor(colorForCheck,userNumber);
+    }
 
     public void openPage(){
         open("/forms");
