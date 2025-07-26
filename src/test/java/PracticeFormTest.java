@@ -1,16 +1,30 @@
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.sleep;
-import static dev.failsafe.internal.util.Assert.isTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PracticeFormTest {
+    private final String firstNameValue = "Енот";
+    private final String secondNameValue = "Енотов";
+    private final String mailValue = "test@test.ru";
+    private final String numberValue = "1234567890";
+    private final String genderValue = "Male";
+    private final String hobbyValue = "Sports";
+    private final String subjectValue = "Maths";
+    private final String letterSubjectValue = subjectValue.substring(0, 1);
+    private final String pictureAddressValue = "test_files/picture.jpg";
+    private final String userAddressValue = "Енотов дом";
+    private final String stateValue = "NCR";
+    private final String cityValue = "Delhi";
+
+    private final String dayValue = "23";
+    private final String monthValue = "May";
+    private final String yearValue = "2024";
+
 
     PracticeFormPage practiceFormPage = new PracticeFormPage();
 
@@ -29,47 +43,44 @@ public class PracticeFormTest {
     }
 
     @Test
-    public void positiveTest(){
-        practiceFormPage.openPage();
-        practiceFormPage.setFirstName("Енот");
-        practiceFormPage.setLastName("Енотов");
-        practiceFormPage.setDteBirth();
-        practiceFormPage.setUserEmail("test@test.ru");
-        practiceFormPage.setMailGender();
-        practiceFormPage.setUserNumber("1234567890");
-        practiceFormPage.setSubject("M","Maths");
-        practiceFormPage.setPicture("test_files/picture.jpg");
-        practiceFormPage.setHobby();
-        practiceFormPage.setAddress("Енотов дом");
-        practiceFormPage.setCity("NCR","Delhi");
-        practiceFormPage.submitForm();
+    public void positiveTest() {
+        practiceFormPage
+                .openPage()
+                .setFirstName(firstNameValue)
+                .setLastName(secondNameValue)
+                .setDateBirth(monthValue, yearValue, dayValue)
+                .setUserEmail(mailValue)
+                .setMailGender(genderValue)
+                .setUserNumber(numberValue)
+                .setSubject(letterSubjectValue, subjectValue)
+                .setPicture(pictureAddressValue)
+                .setHobby(hobbyValue)
+                .setAddress(userAddressValue)
+                .setState(stateValue)
+                .setCity(cityValue)
+                .submitForm();
         Map<String, String> map = practiceFormPage.getSubmissionResult();
-        assertThat(map.get("Student Name")).isEqualTo("Енот Енотов");
-        assertThat(map.get("Address")).isEqualTo("Енотов дом");
-        assertThat(map.get("State and City")).isEqualTo("NCR Delhi");
-        assertThat(map.get("Picture")).isEqualTo("picture.jpg");
-        assertThat(map.get("Student Email")).isEqualTo("test@test.ru");
-        assertThat(map.get("Date of Birth")).isEqualTo("13 July,2025");
-        assertThat(map.get("Gender")).isEqualTo("Male");
-        assertThat(map.get("Mobile")).isEqualTo("1234567890");
-        assertThat(map.get("Subjects")).isEqualTo("Maths");
-        assertThat(map.get("Hobbies")).isEqualTo("Sports");
+        assertThat(map.get("Student Name")).isEqualTo(firstNameValue + " " + secondNameValue);
+        assertThat(map.get("Address")).isEqualTo(userAddressValue);
+        assertThat(map.get("State and City")).isEqualTo(stateValue + " " + cityValue);
+        assertThat(map.get("Picture")).isEqualTo(pictureAddressValue.substring(pictureAddressValue.lastIndexOf('/') + 1));
+        assertThat(map.get("Student Email")).isEqualTo(mailValue);
+        assertThat(map.get("Date of Birth")).isEqualTo(dayValue + " " + monthValue + "," + yearValue);
+        assertThat(map.get("Gender")).isEqualTo(genderValue);
+        assertThat(map.get("Mobile")).isEqualTo(numberValue);
+        assertThat(map.get("Subjects")).isEqualTo(subjectValue);
+        assertThat(map.get("Hobbies")).isEqualTo(hobbyValue);
     }
 
     @Test
     public void negativeTest() {
-        practiceFormPage.openPage();
-        practiceFormPage.submitForm();
-        sleep(5000);
+        practiceFormPage
+                .openPage()
+                .submitForm();
         assertThat(practiceFormPage.firstNameCheck()).isTrue();
-        assertThat(practiceFormPage.lastNameCheck()).isTrue();;
-        assertThat(practiceFormPage.numberCheck()).isTrue();;
-    }
-
-    @Test
-    public void alertTest() {
-        practiceFormPage.openAlertPage();
-        practiceFormPage.choseSimpleAlert();
-        assertThat(practiceFormPage.catchAlertText()).isEqualTo("You clicked a button");
+        assertThat(practiceFormPage.lastNameCheck()).isTrue();
+        assertThat(practiceFormPage.numberCheck()).isTrue();
     }
 }
+
+

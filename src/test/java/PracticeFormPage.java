@@ -1,7 +1,7 @@
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,115 +11,150 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class PracticeFormPage {
 
-    private SelenideElement formBtn = $(".show #item-0"); //Кнопка для открытия формы
-    private SelenideElement alertBtn = $(".show #item-1"); //Кнопка для открытия алертов
-    private SelenideElement simpleAlertBtn = $("#alertButton"); //Первая кнопка в алертах
     private SelenideElement firstName = $("#firstName"); //Поле с именем
     private SelenideElement lastName = $("#lastName"); //Поле с фамилией
     private SelenideElement userEmail = $("#userEmail"); //Поле с почтой
-    private SelenideElement gender = $(".custom-radio:first-of-type"); //Радиобаттон для пола Male
+    private SelenideElement gender1 = $(".custom-radio:nth-of-type(1)");//Радиобаттон для пола Male
+    private SelenideElement gender2 = $(".custom-radio:nth-of-type(2)");//Радиобаттон для пола Female
+    private SelenideElement gender3 = $(".custom-radio:nth-of-type(3)");//Радиобаттон для пола Other
     private SelenideElement userNumber = $("#userNumber"); //Поле для телефона
     private ElementsCollection rows = $$("table.table-dark tbody tr"); //Все строки таблицы результатов
     private SelenideElement sudmitBtn = $("#submit"); //Кнопка подтверждения
     private SelenideElement subject = $("#subjectsInput");//Выбор предмета
     private SelenideElement picture = $("#uploadPicture");//Выбор файла
     private SelenideElement address = $("textarea.form-control");//Ввод адреса
-    private SelenideElement hobby1 = $("label[for='hobbies-checkbox-1']");//Ввод адреса
+    private SelenideElement hobbySports = $("label[for='hobbies-checkbox-1']");//Хобби - спорт
+    private SelenideElement hobbyReading = $("label[for='hobbies-checkbox-2']");//Хобби - чтение
+    private SelenideElement hobbyMusic = $("label[for='hobbies-checkbox-3']");//Хобби - музыка
     private ElementsCollection forCity = $$("#stateCity-wrapper .col-md-4 .css-1wa3eu0-placeholder"); //Костыль
-    private SelenideElement dateBirth = $("#dateOfBirthInput");//Вызов календаря
-    private SelenideElement day13 = $(".react-datepicker__day--013");//Костыль
-    private String colorForCheck = "rgb(220, 53, 69)";
+    private SelenideElement dateBirth = $("#dateOfBirthInput");//Открыть календарь
+    private final String colorOfRedFrame = "rgb(220, 53, 69)";
 
 
-
-    private boolean checkColor (String color, SelenideElement elem){
-       return elem.getCssValue("border-color").equals(color);
+    private boolean checkColor(String expectedColor, SelenideElement elem) {
+        try {
+            elem.shouldHave(cssValue("border-color", expectedColor), Duration.ofSeconds(5));
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
     }
 
-    public boolean firstNameCheck(){
-        return checkColor(colorForCheck,firstName);
+    public boolean firstNameCheck() {
+        return checkColor(colorOfRedFrame, firstName);
     }
 
-    public boolean lastNameCheck(){
-        return checkColor(colorForCheck,lastName);
+    public boolean lastNameCheck() {
+        return checkColor(colorOfRedFrame, lastName);
     }
 
-    public boolean numberCheck(){
-        return checkColor(colorForCheck,userNumber);
+    public boolean numberCheck() {
+        return checkColor(colorOfRedFrame, userNumber);
     }
 
-    public void openPage(){
-        open("/forms");
-        formBtn.shouldBe(visible, enabled).click();
+    public PracticeFormPage openPage() {
+        open("/automation-practice-form");
+        return this;
     }
 
-    public void openAlertPage(){
-        open("/alertsWindows");
-        alertBtn.shouldBe(visible, enabled).click();
-    }
-
-    public void choseSimpleAlert(){
-        simpleAlertBtn.click();
-    }
-
-    public String catchAlertText(){
-        return Selenide.switchTo().alert().getText();
-    }
-
-    public void setFirstName(String value){
+    public PracticeFormPage setFirstName(String value) {
         firstName.setValue(value);
+        return this;
     }
 
-    public void setUserEmail(String value){
+    public PracticeFormPage setUserEmail(String value) {
         userEmail.setValue(value);
+        return this;
     }
 
-    public void setDteBirth(){
+    public PracticeFormPage setDateBirth(String monthName, String yearNumber, String dayNumber) {
         dateBirth.click();
-        day13.click();
+        $(".react-datepicker__year-select").shouldBe(clickable).click();
+        $(byText(yearNumber)).shouldBe(clickable).click();
+        $(".react-datepicker__month-select").shouldBe(clickable).click();
+        $(byText(monthName)).shouldBe(clickable).click();
+        $("[aria-label*='" + monthName + " " + dayNumber + "']").shouldBe(clickable).click();
+        return this;
     }
 
-    public void setLastName(String value){
+    public PracticeFormPage setLastName(String value) {
         lastName.setValue(value);
+        return this;
     }
 
-    public void setMailGender(){
-        gender.click();
+    public PracticeFormPage setMailGender(String gender) {
+        switch (gender) {
+            case "Male":
+                gender1.click();
+                break;
+            case "Female":
+                gender2.click();
+                break;
+            case "Other":
+                gender3.click();
+                break;
+            default:
+                gender1.click();
+        }
+        return this;
     }
 
-    public void setUserNumber(String value){
+    public PracticeFormPage setUserNumber(String value) {
         userNumber.setValue(value);
+        return this;
     }
 
-    public void setSubject(String letter,String sub){
+    public PracticeFormPage setSubject(String letter, String sub) {
         subject.setValue(letter);
         $(byText(sub)).click();
+        return this;
     }
 
-    public void setPicture(String file){
+    public PracticeFormPage setPicture(String file) {
         picture.uploadFromClasspath(file);
+        return this;
     }
 
-    public void setHobby(){
-        hobby1.click();
+    public PracticeFormPage setHobby(String hobbyType) {
+        switch (hobbyType) {
+            case "Sports":
+                hobbySports.click();
+                break;
+            case "Reading":
+                hobbyReading.click();
+                break;
+            case "Music":
+                hobbyMusic.click();
+                break;
+            default:
+                gender1.click();
+        }
+        return this;
     }
 
-    public void setAddress(String value){
+    public PracticeFormPage setAddress(String value) {
         address.setValue(value);
+        return this;
     }
 
-    public void setCity(String state,String city){
-        forCity.get(0).click();
+    public PracticeFormPage setState(String state) {
+        forCity.get(0).scrollTo().click();
         $(byText(state)).click();
+        return this;
+    }
+
+    public PracticeFormPage setCity(String city) {
         forCity.get(0).click();
         $(byText(city)).click();
+        return this;
     }
 
-    public void submitForm(){
+    public PracticeFormPage submitForm() {
         sudmitBtn.scrollTo().click();
+        return this;
     }
 
-    public Map<String,String> getSubmissionResult(){
+    public Map<String, String> getSubmissionResult() {
         Map<String, String> tableData = new HashMap<>();
         for (SelenideElement row : rows) {
             SelenideElement label = row.$("td", 0);
