@@ -14,9 +14,6 @@ public class PracticeFormPage {
     private SelenideElement firstName = $("#firstName"); //Поле с именем
     private SelenideElement lastName = $("#lastName"); //Поле с фамилией
     private SelenideElement userEmail = $("#userEmail"); //Поле с почтой
-    private SelenideElement gender1 = $(".custom-radio:nth-of-type(1)");//Радиобаттон для пола Male
-    private SelenideElement gender2 = $(".custom-radio:nth-of-type(2)");//Радиобаттон для пола Female
-    private SelenideElement gender3 = $(".custom-radio:nth-of-type(3)");//Радиобаттон для пола Other
     private SelenideElement userNumber = $("#userNumber"); //Поле для телефона
     private ElementsCollection rows = $$("table.table-dark tbody tr"); //Все строки таблицы результатов
     private SelenideElement sudmitBtn = $("#submit"); //Кнопка подтверждения
@@ -26,10 +23,15 @@ public class PracticeFormPage {
     private SelenideElement hobbySports = $("label[for='hobbies-checkbox-1']");//Хобби - спорт
     private SelenideElement hobbyReading = $("label[for='hobbies-checkbox-2']");//Хобби - чтение
     private SelenideElement hobbyMusic = $("label[for='hobbies-checkbox-3']");//Хобби - музыка
-    private ElementsCollection forCity = $$("#stateCity-wrapper .col-md-4 .css-1wa3eu0-placeholder"); //Костыль
+    private SelenideElement stateField = $("#state > div > div.css-1hwfws3"); //Выбор штата
+    private SelenideElement cityField = $("#city > div > div.css-1hwfws3"); //Выбор штата
     private SelenideElement dateBirth = $("#dateOfBirthInput");//Открыть календарь
     private final String colorOfRedFrame = "rgb(220, 53, 69)";
-
+    private final Map<String, String> hobbyData = Map.of(
+            "Sports", "1",
+            "Reading", "2",
+            "Music", "3"
+    );
 
     private boolean checkColor(String expectedColor, SelenideElement elem) {
         try {
@@ -83,19 +85,7 @@ public class PracticeFormPage {
     }
 
     public PracticeFormPage setMailGender(String gender) {
-        switch (gender) {
-            case "Male":
-                gender1.click();
-                break;
-            case "Female":
-                gender2.click();
-                break;
-            case "Other":
-                gender3.click();
-                break;
-            default:
-                gender1.click();
-        }
+        $("[value=" + gender + "] + label").click();
         return this;
     }
 
@@ -116,19 +106,7 @@ public class PracticeFormPage {
     }
 
     public PracticeFormPage setHobby(String hobbyType) {
-        switch (hobbyType) {
-            case "Sports":
-                hobbySports.click();
-                break;
-            case "Reading":
-                hobbyReading.click();
-                break;
-            case "Music":
-                hobbyMusic.click();
-                break;
-            default:
-                gender1.click();
-        }
+        $("label[for='hobbies-checkbox-" + hobbyData.get(hobbyType) + "']").click();
         return this;
     }
 
@@ -138,13 +116,13 @@ public class PracticeFormPage {
     }
 
     public PracticeFormPage setState(String state) {
-        forCity.get(0).scrollTo().click();
+        stateField.scrollTo().click();
         $(byText(state)).click();
         return this;
     }
 
     public PracticeFormPage setCity(String city) {
-        forCity.get(0).click();
+        cityField.click();
         $(byText(city)).click();
         return this;
     }
