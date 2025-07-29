@@ -20,9 +20,6 @@ public class PracticeFormPage {
     private SelenideElement subject = $("#subjectsInput");//Выбор предмета
     private SelenideElement picture = $("#uploadPicture");//Выбор файла
     private SelenideElement address = $("textarea.form-control");//Ввод адреса
-    private SelenideElement hobbySports = $("label[for='hobbies-checkbox-1']");//Хобби - спорт
-    private SelenideElement hobbyReading = $("label[for='hobbies-checkbox-2']");//Хобби - чтение
-    private SelenideElement hobbyMusic = $("label[for='hobbies-checkbox-3']");//Хобби - музыка
     private SelenideElement stateField = $("#state > div > div.css-1hwfws3"); //Выбор штата
     private SelenideElement cityField = $("#city > div > div.css-1hwfws3"); //Выбор штата
     private SelenideElement dateBirth = $("#dateOfBirthInput");//Открыть календарь
