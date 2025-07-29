@@ -77,9 +77,9 @@ public class PracticeFormTest {
         practiceFormPage
                 .openPage()
                 .submitForm();
-        assertThat(practiceFormPage.firstNameCheck()).isTrue();
-        assertThat(practiceFormPage.lastNameCheck()).isTrue();
-        assertThat(practiceFormPage.numberCheck()).isTrue();
+        assertThat(practiceFormPage.firstNameCheckFrame()).isTrue();
+        assertThat(practiceFormPage.lastNameCheckFrame()).isTrue();
+        assertThat(practiceFormPage.numberCheckFrame()).isTrue();
     }
 }
 

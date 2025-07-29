@@ -39,15 +39,15 @@ public class PracticeFormPage {
         }
     }
 
-    public boolean firstNameCheck() {
+    public boolean firstNameCheckFrame() {
         return checkColor(colorOfRedFrame, firstName);
     }
 
-    public boolean lastNameCheck() {
+    public boolean lastNameCheckFrame() {
         return checkColor(colorOfRedFrame, lastName);
     }
 
-    public boolean numberCheck() {
+    public boolean numberCheckFrame() {
         return checkColor(colorOfRedFrame, userNumber);
     }
 
